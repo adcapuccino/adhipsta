@@ -43,7 +43,7 @@ def init(loop):
         yield from seed(mongo)
 
     server = yield from loop.create_server(app.make_handler(), '0.0.0.0', environment.Config.port)
-    print('Server started on 0.0.0.0:9000')
+    print('Server started on 0.0.0.0:%s' % environment.Config.port)
     return server
 
 loop = asyncio.get_event_loop()
