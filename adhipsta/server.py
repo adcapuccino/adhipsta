@@ -42,7 +42,7 @@ def init(loop):
     if environment.Config.seedDb:
         yield from seed(mongo)
 
-    server = yield from loop.create_server(app.make_handler(), '0.0.0.0', 9000)
+    server = yield from loop.create_server(app.make_handler(), '0.0.0.0', environment.Config.port)
     print('Server started on 0.0.0.0:9000')
     return server
 
