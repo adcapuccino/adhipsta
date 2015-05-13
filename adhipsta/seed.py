@@ -4,7 +4,6 @@ Created on May 12, 2015
 @author: mike
 '''
 import asyncio
-import contextlib
 from adhipsta import auth_service
 
 
