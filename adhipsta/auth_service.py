@@ -30,7 +30,7 @@ def authenticated_user(req):
     if len(parts) != 2 or parts[0].lower() != 'bearer':
         raise web.HTTPUnauthorized()
 
-    jwt_token = parts[1]
+    jwt_token = jsonx.loads(parts[1])
     
     try:
         user = jwt.decode(jwt_token, environment.Config.secret['jwt'])

@@ -6,7 +6,7 @@ Created on May 12, 2015
 import asyncio
 from aiohttp import web
 from adhipsta.util import Response
-from adhipsta import auth_service
+from adhipsta import auth_service, jsonx
 
 
 @asyncio.coroutine
@@ -23,4 +23,4 @@ def authenticate(req):
     
     token = auth_service.sign_token(user['_id'], user['role'])
 
-    return Response.json({'token': token})
+    return Response.json({'token': jsonx.dumps(token)})
