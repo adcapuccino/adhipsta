@@ -5,7 +5,7 @@ Created on May 12, 2015
 '''
 import os
 from adhipsta.api import things, users
-from adhipsta.auth import local
+from adhipsta.auth import local, google
 
 
 def register(router):
@@ -16,8 +16,12 @@ def register(router):
     router.add_route('GET', '/api/users/me', users.me)
     router.add_route('GET', '/api/users', users.index)
     
-    # auth
+    # auth/local
     router.add_route('POST', '/auth/local', local.authenticate)
+
+    # auth/google
+    router.add_route('GET', '/auth/google/callback', google.callback)
+    router.add_route('GET', '/auth/google', google.enter)
     
     router.add_static('/bower_components', os.path.join(os.path.dirname(__file__), '..', 'node_modules'))
     router.add_static('/', os.path.join(os.path.dirname(__file__), '..', 'client'))
