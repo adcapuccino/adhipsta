@@ -30,9 +30,9 @@ class ConfigBase:
     }
 
     google = {
-        'clientID'    : os.environ.get('GOOGLE_ID', 'id'),
+        'clientId'    : os.environ.get('GOOGLE_ID', 'id'),
         'clientSecret': os.environ.get('GOOGLE_SECRET', 'secret'),
-        'callbackURL' : os.environ.get('DOMAIN', '') + '/auth/google/callback'
+        'callbackUrl' : os.environ.get('DOMAIN', '') + '/auth/google/callback'
     }
     
     adwords = {
