@@ -27,6 +27,7 @@ npm install
 ## Running server
 
 ```
+export PYTHONPATH=.
 python adhipsta/server.py
 ```
 
@@ -45,3 +46,16 @@ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-mult
 ```
 
 Everything else is controlled by `Procfile`, `package.json`, `requirements.txt`, and `runtime.txt`
+
+## Important environment variables
+```
+heroku config:add DOMAIN=http://adhipsta.herokuapp.com -a adhipsta
+```
+`DOMAIN` is needed for OAuth2 callback address. This is the name of the server running the application. Default is `http://localhost:9000`.
+
+```
+heroku config GOOGLE_ID=blah -a adhipsta
+heroku config GOOGLE_SECRET=foo -a adhipsta
+```
+This is needed for Google OAuth2 login and adwords api token. Values are set in Google developers console for the AdHipsta application.
+Make sure that AdHipsta Credentials are configured to accept correct callback address.
