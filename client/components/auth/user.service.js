@@ -13,17 +13,12 @@ angular.module('adcappuccinoApp')
         }
       },
       releaseApiToken: {
+        url: '/auth/adwords/api_token',
         method: 'DELETE',
-        params: {
-          id: 'me',
-          controller:'api_token'
-        }
       },
       get: {
-        method: 'GET',
-        params: {
-          id:'me'
-        }
+        url: '/api/users/me',
+        method: 'GET'
       }
 	  });
   });

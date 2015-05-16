@@ -8,39 +8,39 @@ import urllib
 from aiohttp import web, client
 import logging
 import code
-from adhipsta.util import Response
 
 
 class OAuth2:
 
-    def __init__(self, authorizationUrl, tokenUrl, clientId, clientSecret, callbackUrl, scope=None):
-        self._authorizationUrl = authorizationUrl
-        self._tokenUrl = tokenUrl
-        self._clientId = clientId
-        self._clientSecret = clientSecret
-        self._callbackUrl = callbackUrl
-        self._scope = scope
+    def __init__(self, authorizationUrl, tokenUrl, revokeUrl, clientId, clientSecret, callbackUrl):
+        self.authorizationUrl = authorizationUrl
+        self.tokenUrl = tokenUrl
+        self.revokeUrl = revokeUrl
+        self.clientId = clientId
+        self.clientSecret = clientSecret
+        self.callbackUrl = callbackUrl
 
     @asyncio.coroutine
-    def enter(self, req):
+    def enter(self, req, scope, **options):
         params = {
             'response_type': 'code',
-            'redirect_uri' : self._callbackUrl,
-            'client_id'    : self._clientId
+            'redirect_uri' : self.callbackUrl,
+            'client_id'    : self.clientId
         }
 
-        if self._scope:
-            if type(self._scope) is str:
-                params['scope'] = self._scope
-            else:
-                # assume it a list of strings
-                params['scope'] = ' '.join(self._scope)
+        if type(scope) is list:
+            params['scope'] = ' '.join(scope)
+        else:
+            params['scope'] = str(scope)
 
-        location = self._authorizationUrl + '?' + urllib.parse.urlencode(params)
+        for name, value in options.items():
+            params[name] = str(value)
+
+        location = self.authorizationUrl + '?' + urllib.parse.urlencode(params)
         raise web.HTTPFound(location)
 
     @asyncio.coroutine
-    def callback(self, req):
+    def callback(self, req, **options):
         query = urllib.parse.parse_qs(req.query_string) if req.query_string else {}
 
         if query.get('error'):
@@ -49,34 +49,37 @@ class OAuth2:
         
         if query.get('code'):
             code = query['code']
-            return (yield from self.getAccessTokens(code, grant_type='authorization_code', redirect_uri=self._callbackUrl))
+            return (yield from self.getAccessTokens(code, grant_type='authorization_code', **options))
 
         raise web.HTTPUnauthorized()
-    
+
     @asyncio.coroutine
-    def getAccessTokens(self, code, grant_type='refresh_token', **kw):
+    def getAccessTokens(self, code, grant_type='refresh_token', **options):
         params = {
             'grant_type'   : grant_type,
-            #'redirect_uri' : self._callbackUrl,
-            'client_id'    : self._clientId,
-            'client_secret': self._clientSecret
+            'redirect_uri' : self.callbackUrl,
+            'client_id'    : self.clientId,
+            'client_secret': self.clientSecret
         }
         
-        params.update(kw)
+        params.update(options)
         
         if grant_type == 'refresh_token':
             params['refresh_token'] = code
         else:
             params['code'] = code
 
-        r = yield from client.request('post', self._tokenUrl, data=params)
+        r = yield from client.request('post', self.tokenUrl, data=params)
         if r.status != 200:
             raise RuntimeError('bad token?')
-        result = yield from r.json()
-        return result
-
-    @asyncio.coroutine
-    def get(self, url, accessToken):
-        r = yield from client.request('get', url, params={'access_token': accessToken})
+        
         return (yield from r.json())
 
+    @asyncio.coroutine
+    def release(self, token):
+        if token is None:
+            raise RuntimeError('trying to release empty token')
+
+        r = yield from client.request('get', self.revokeUrl, params={'token': token})
+        if r.status != 200:
+            raise RuntimeError('attempt to release token failed')

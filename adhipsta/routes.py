@@ -5,7 +5,7 @@ Created on May 12, 2015
 '''
 import os
 from adhipsta.api import things, users
-from adhipsta.auth import local, google
+from adhipsta.auth import local, google, adwords
 
 
 def register(router):
@@ -22,6 +22,11 @@ def register(router):
     # auth/google
     router.add_route('GET', '/auth/google/callback', google.callback)
     router.add_route('GET', '/auth/google', google.enter)
+    
+    # auth/adwortds api
+    router.add_route('GET', '/auth/adwords/callback', adwords.callback)
+    router.add_route('DELETE', '/auth/adwords/api_token', adwords.release)
+    router.add_route('GET', '/auth/adwords', adwords.enter)
     
     router.add_static('/bower_components', os.path.join(os.path.dirname(__file__), '..', 'node_modules'))
     router.add_static('/', os.path.join(os.path.dirname(__file__), '..', 'client'))
