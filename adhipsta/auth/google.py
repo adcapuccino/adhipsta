@@ -6,10 +6,8 @@ Created on May 12, 2015
 import asyncio
 from adhipsta.auth import oauth2
 from adhipsta.config import environment
-from adhipsta.util import Response
 from aiohttp import web, client
-from adhipsta import auth_service
-import json
+from adhipsta import auth_service, util
 
 
 google_oauth = oauth2.OAuth2(
@@ -63,5 +61,5 @@ def callback(req):
     jwt_token = auth_service.sign_token(user['_id'], user['role'])
 
     response = web.HTTPFound('/')
-    response.set_cookie('token', json.dumps(jwt_token))
+    response.set_cookie('token', util.Angular.serialize_cookie(jwt_token))
     raise response

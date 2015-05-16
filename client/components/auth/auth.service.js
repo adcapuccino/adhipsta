@@ -25,9 +25,9 @@ angular.module('adcappuccinoApp')
           password: user.password
         }).
         success(function(data) {
-          $cookieStore.put('token', data.token);
           currentUser = User.get();
-          deferred.resolve(data);
+          $location.path('/');
+          deferred.resolve();
           return cb();
         }).
         error(function(err) {

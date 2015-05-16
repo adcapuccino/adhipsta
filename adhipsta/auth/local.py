@@ -5,8 +5,7 @@ Created on May 12, 2015
 '''
 import asyncio
 from aiohttp import web
-from adhipsta.util import Response
-from adhipsta import auth_service, jsonx
+from adhipsta import auth_service, util
 
 
 @asyncio.coroutine
@@ -21,6 +20,8 @@ def authenticate(req):
     if not auth_service.check_password(user, params['password']):
         raise web.HTTPUnauthorized()
     
-    token = auth_service.sign_token(user['_id'], user['role'])
-
-    return Response.json({'token': jsonx.dumps(token)})
+    jwt_token = auth_service.sign_token(user['_id'], user['role'])
+    
+    response = web.HTTPAccepted()
+    response.set_cookie('token', util.Angular.serialize_cookie(jwt_token))
+    raise response

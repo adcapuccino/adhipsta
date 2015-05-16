@@ -44,7 +44,7 @@ class OAuth2:
         query = urllib.parse.parse_qs(req.query_string) if req.query_string else {}
 
         if query.get('error'):
-            logging.debug('Oauth2 error:', query['error'])
+            logging.debug('Oauth2 error: %s', query['error'])
             raise web.HTTPUnauthorized()
         
         if query.get('code'):

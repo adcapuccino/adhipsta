@@ -3,8 +3,7 @@ Created on May 12, 2015
 
 @author: mike
 '''
-from aiohttp import hdrs, web
-from adhipsta import jsonx
+from aiohttp import web
 import jwt
 from adhipsta.config import environment
 import asyncio
@@ -12,28 +11,21 @@ import uuid
 import hashlib
 from asyncio_mongo._bson.objectid import ObjectId
 from aiohttp.web_exceptions import HTTPUnauthorized
+import datetime
+from adhipsta import util
 
 
 @asyncio.coroutine
 def authenticated_user(req):
-    authorization = req.headers.get(hdrs.AUTHORIZATION)
 
-    if authorization is None:
-        cookie_token = req.cookies.get('token')
-        if cookie_token is not None:
-            authorization = 'Bearer ' + cookie_token
-
-    if authorization is None:
+    token = req.cookies.get('token')
+    if token is None:
         raise web.HTTPUnauthorized()
     
-    parts = authorization.split()
-    if len(parts) != 2 or parts[0].lower() != 'bearer':
-        raise web.HTTPUnauthorized()
-
-    jwt_token = jsonx.loads(parts[1])
+    token = util.Angular.deserialize_cookie(token)
     
     try:
-        user = jwt.decode(jwt_token, environment.Config.secret['jwt'])
+        user = jwt.decode(token, environment.Config.secret['jwt'])
     except:
         raise web.HTTPUnauthorized()
 
@@ -86,5 +78,9 @@ def check_password(user, password):
 
 
 def sign_token(_id, role):
-    return jwt.encode({'_id': str(_id), 'role': role}, environment.Config.secret['jwt']).decode('ascii')
+    return jwt.encode({
+        '_id' : str(_id), 
+        'role': role,
+        'exp' : datetime.datetime.utcnow() + datetime.timedelta(days=environment.Config.secret['jwt_expiration_days'])
+    }, environment.Config.secret['jwt']).decode('ascii')
 
