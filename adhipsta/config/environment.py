@@ -36,9 +36,9 @@ class ConfigBase:
     }
     
     adwords = {
-        'clientID'    : os.environ.get('ADHIPSTA_ID', '650003686975-c2kikodb6dc8190so8oh83bbvr7s260h.apps.googleusercontent.com'),
-        'clientSecret': os.environ.get('ADHIPSTA_SECRET', 'ACblH6zl_6MY8diWlgjcyZua'),
-        'callbackURL' : os.environ.get('DOMAIN', '') + '/auth/adwords/callback'
+        'clientId'    : os.environ.get('ADWORDS_ID', 'id'),
+        'clientSecret': os.environ.get('ADWORDS_SECRET', 'secret'),
+        'callbackUrl' : os.environ.get('DOMAIN', '') + '/auth/adwords/callback'
     }
 
 if ConfigBase.env == 'development':
