@@ -21,7 +21,7 @@ def authenticated_user(req):
     if authorization is None:
         cookie_token = req.cookies.get('token')
         if cookie_token is not None:
-            authorization = 'Bearer ' + jsonx.loads(cookie_token)
+            authorization = 'Bearer ' + cookie_token
 
     if authorization is None:
         raise web.HTTPUnauthorized()
