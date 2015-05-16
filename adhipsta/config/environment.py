@@ -4,6 +4,21 @@ Created on May 12, 2015
 @author: mike
 '''
 import os
+import codecs
+
+
+'''
+If ~/.adhipsta exists, read environment vars from there
+'''
+_rcfile = os.path.expanduser(r'~/.adhipsta')
+if os.path.isfile(_rcfile):
+    with codecs.open(_rcfile, 'r', 'utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            env_name, env_value = line.split('=', 2)
+            os.environ[env_name.strip()] = env_value.strip()
 
 
 class ConfigBase:
@@ -26,19 +41,22 @@ class ConfigBase:
     
     secret = {
         # secret phrase for JWT encryption/decryption
-        'jwt': 'adhipsta big secret'
+        'jwt': 'adhipsta big secret',
+        
+        # how many days login token is valid (will force re-login is expired)
+        'jwt_expiration_days': 14
     }
 
     google = {
         'clientId'    : os.environ.get('GOOGLE_ID', 'id'),
         'clientSecret': os.environ.get('GOOGLE_SECRET', 'secret'),
-        'callbackUrl' : os.environ.get('DOMAIN', '') + '/auth/google/callback'
+        'callbackUrl' : os.environ.get('DOMAIN', 'http://localhost:9000') + '/auth/google/callback'
     }
     
     adwords = {
         'clientId'    : os.environ.get('ADWORDS_ID', 'id'),
         'clientSecret': os.environ.get('ADWORDS_SECRET', 'secret'),
-        'callbackUrl' : os.environ.get('DOMAIN', '') + '/auth/adwords/callback'
+        'callbackUrl' : os.environ.get('DOMAIN', 'http://localhost:9000') + '/auth/adwords/callback'
     }
 
 if ConfigBase.env == 'development':
