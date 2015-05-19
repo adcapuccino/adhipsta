@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('adcappuccinoApp')
+angular.module('adhipstaApp')
   .controller('SettingsCtrl', function ($scope, $window, User, Auth) {
     $scope.errors = {};
 
