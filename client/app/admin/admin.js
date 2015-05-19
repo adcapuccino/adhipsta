@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('adcappuccinoApp')
+angular.module('adhipstaApp')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/admin', {

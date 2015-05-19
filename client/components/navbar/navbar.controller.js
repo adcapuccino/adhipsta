@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('adcappuccinoApp')
+angular.module('adhipstaApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
       'title': 'Home',

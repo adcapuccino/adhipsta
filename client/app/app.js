@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('adcappuccinoApp', [
+angular.module('adhipstaApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',

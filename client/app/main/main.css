@@ -19,7 +19,11 @@
     color: #F5F5F5;
     text-align: center;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-    background: #4393B9;
+    background: #d7674d;
+}
+
+a {
+    color: #D52B03;	
 }
 
 .footer {
