@@ -1,0 +1,23 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+        <p>{{message}}</p>
+        <div class="alert alert-error">{{error}}</div>
+		<div ng-show="!error" ng-controller="CampaignsCtrl">
+		    <table class="table table-striped">
+		        <tr>
+		            <th>Id</th>
+		            <th>Name</th>
+		            <th>Status</th>
+		        </tr>
+			    <tr ng-repeat="campaign in campaigns">
+			        <td>{{campaign.id}}</td>
+			        <td>{{campaign.name}}</td>
+			        <td>{{campaign.status}}</td>
+			    </tr>
+		    </table>
+		</div>
+    </div>
+</div>

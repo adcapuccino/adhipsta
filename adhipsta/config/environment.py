@@ -58,6 +58,9 @@ class ConfigBase:
         'clientSecret': os.environ.get('ADWORDS_SECRET', 'secret'),
         'callbackUrl' : os.environ.get('DOMAIN', 'http://localhost:9000') + '/auth/adwords/callback'
     }
+    
+    developer_token = os.environ.get('DEVELOPER_TOKEN', 'dev_token')
+    client_customer_id = os.environ.get('CLIENT_CUSTOMER_ID')
 
 if ConfigBase.env == 'development':
     from adhipsta.config import development
