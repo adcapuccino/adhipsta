@@ -58,3 +58,4 @@ target/
 
 # We also use NodeJS/NPM to install Javascript and other client-side libraries and resources
 node_modules
+.DS_Store
