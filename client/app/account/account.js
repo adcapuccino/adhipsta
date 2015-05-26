@@ -11,6 +11,10 @@ angular.module('adhipstaApp')
         templateUrl: 'app/account/signup/signup.html',
         controller: 'SignupCtrl'
       })
+      .when('/campaigns', {
+        templateUrl: 'app/account/campaigns/campaigns.html',
+        controller: 'CampaignsCtrl'
+      })
       .when('/settings', {
         templateUrl: 'app/account/settings/settings.html',
         controller: 'SettingsCtrl',

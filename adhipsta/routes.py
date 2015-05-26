@@ -4,13 +4,15 @@ Created on May 12, 2015
 @author: mike
 '''
 import os
-from adhipsta.api import things, users
+from adhipsta.api import things, users, adwords_api
 from adhipsta.auth import local, google, adwords
 
 
 def register(router):
     # things
     router.add_route('GET', '/api/things', things.index)
+    
+    adwords_api.mount_as(router, '/api/adwords')
 
     # users
     router.add_route('GET', '/api/users/me', users.me)

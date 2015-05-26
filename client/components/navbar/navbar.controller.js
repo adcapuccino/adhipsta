@@ -20,4 +20,8 @@ angular.module('adhipstaApp')
     $scope.isActive = function(route) {
       return route === $location.path();
     };
+    
+    $scope.hasApiToken = function() {
+        return Auth.getCurrentUser() && Auth.getCurrentUser().has_api_token;
+    };
   });
